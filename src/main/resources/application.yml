@@ -3,6 +3,8 @@ spring:
       view:
         prefix: /WEB-INF/jsp/
         suffix: .jsp
+#    redis:
+#      host:
 server:
   context-path: /sso-client
   port: 8083
@@ -22,3 +24,5 @@ sso:
     url: http://localhost:8082/sso-service/index
   client:
     url: redirect_url
+  token:
+    url: http://localhost:8082/sso-service/checkToken
