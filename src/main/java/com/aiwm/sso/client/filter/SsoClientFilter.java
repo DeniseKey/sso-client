@@ -1,5 +1,6 @@
 package com.aiwm.sso.client.filter;
 
+import com.aiwm.sso.client.common.Conf;
 import com.aiwm.sso.client.common.HttpClientUtils;
 import com.aiwm.sso.client.common.LoginHelper;
 import com.aiwm.sso.client.data.service.SsoClientService;
@@ -26,6 +27,8 @@ public class SsoClientFilter implements Filter {
     private String redirect_url;
     @Value("${sso.token.url}")
     private String token_url;
+    @Value("${sso.logout.url}")
+    private String logout_url;
 
 
 
@@ -43,7 +46,12 @@ public class SsoClientFilter implements Filter {
 
         //获取项目访问路径
         String link = req.getRequestURL().toString();
-
+        String servletPath = req.getServletPath();
+        //注销
+        if(Conf.LOGOUT.equals(servletPath)){
+            res.sendRedirect(logout_url);
+            return;
+        }
         String sessionIdByCookie = LoginHelper.getSessionIdByCookie(req);
         if(StringUtils.isBlank(sessionIdByCookie)){
 
@@ -63,23 +71,13 @@ public class SsoClientFilter implements Filter {
                     String toSsoServie=ssoService+"?"+redirect_url+"="+link;
                     res.sendRedirect(toSsoServie);
                     return;
-                }else {
-                    HttpSession session = req.getSession();
-                    session.setAttribute(sessionIdByCookie,true);
-
                 }
-            }
-
-            HttpSession session = req.getSession();
-            Boolean attribute =(Boolean) session.getAttribute(sessionIdByCookie);
-            if(attribute==false){//为false的情况，1、用户已经退出了 2、多个项目访问
-
-                String toSsoServie=ssoService+"?"+redirect_url+"="+link+"&userKey="+sessionIdByCookie;
+            }else {
+                String toSsoServie=ssoService+"?"+redirect_url+"="+link;
                 res.sendRedirect(toSsoServie);
                 return;
             }
         }
-
 
         chain.doFilter(request, response);
         return;

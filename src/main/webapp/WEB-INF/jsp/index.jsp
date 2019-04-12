@@ -11,6 +11,7 @@
     <title>test</title>
 </head>
 <body>
+<a href="${request.contextPath}/sso-client/loginLogout">Logout</a>
 测试成功！
 </body>
 </html>

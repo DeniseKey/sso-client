@@ -7,11 +7,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class Conf {
-   /* @Value("${sso.service.url}")
-    private String ssoService;
-    @Value("${sso.client.url}")
-    private String redirect_url;*/
-    public static final String SSOSERVICE="http://localhost:8082/sso-service/index";
     public static final String REDIRECT_URL="redirect_url";
     public static final String SSO_SESSIONID = "sso_sessionid";
+    public static final String LOGOUT="/loginLogout";
 }
